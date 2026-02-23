@@ -137,7 +137,7 @@ const Contact = () => {
         {/* WhatsApp Direct */}
         <div className="mt-12 text-center">
           <p className="text-slate-600 dark:text-slate-400 mb-4">Prefer to reach us directly?</p>
-          <a href="https://wa.me/2349137742026" target="_blank" rel="noopener noreferrer"
+          <a href="https://wa.me/2349137742036" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white font-semibold px-6 py-3 rounded-xl transition shadow-lg shadow-green-600/20">
             <MessageCircle className="w-5 h-5" />
             Chat on WhatsApp

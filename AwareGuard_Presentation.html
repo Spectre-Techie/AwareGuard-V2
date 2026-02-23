@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AwareGuard v2.0 — Internship Presentation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --blue: #2563eb;
+    --indigo: #4f46e5;
+    --dark: #0f172a;
+    --darker: #020617;
+    --slate: #64748b;
+    --light: #f8fafc;
+    --green: #10b981;
+    --orange: #f59e0b;
+    --purple: #8b5cf6;
+    --red: #ef4444;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: var(--darker);
+    color: white;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 100px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    transform: translateX(40px);
+    overflow-y: auto;
+  }
+
+  .slide.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: translateX(0);
+  }
+
+  /* Backgrounds */
+  .bg-gradient { background: linear-gradient(135deg, var(--dark) 0%, #1e1b4b 50%, var(--dark) 100%); }
+  .bg-dark { background: var(--darker); }
+  .bg-blue { background: linear-gradient(135deg, #1e3a5f 0%, var(--dark) 100%); }
+  .bg-indigo { background: linear-gradient(135deg, #312e81 0%, var(--dark) 100%); }
+  .bg-green { background: linear-gradient(135deg, #064e3b 0%, var(--dark) 100%); }
+  .bg-purple { background: linear-gradient(135deg, #3b0764 0%, var(--dark) 100%); }
+
+  /* Typography */
+  .super-title { font-size: 4.5rem; font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; }
+  .title { font-size: 3rem; font-weight: 800; line-height: 1.2; letter-spacing: -0.02em; }
+  .subtitle { font-size: 1.5rem; font-weight: 400; color: #94a3b8; line-height: 1.6; margin-top: 16px; }
+  .section-label {
+    font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;
+    color: #60a5fa; margin-bottom: 16px; display: inline-block;
+    background: rgba(59,130,246,0.1); padding: 6px 16px; border-radius: 100px;
+    border: 1px solid rgba(59,130,246,0.2);
+  }
+  .highlight { color: #60a5fa; }
+  .highlight-green { color: #34d399; }
+  .highlight-orange { color: #fbbf24; }
+  .highlight-purple { color: #a78bfa; }
+
+  /* Grid Layouts */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 40px; }
+  .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 20px; margin-top: 40px; }
+
+  /* Cards */
+  .card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 32px;
+    backdrop-filter: blur(8px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: rgba(96,165,250,0.3); }
+  .card-icon {
+    width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center;
+    justify-content: center; font-size: 1.5rem; margin-bottom: 16px;
+  }
+  .card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 8px; }
+  .card p { font-size: 0.95rem; color: #94a3b8; line-height: 1.6; }
+
+  /* Stats */
+  .stat-number { font-size: 3rem; font-weight: 900; letter-spacing: -0.03em; }
+  .stat-label { font-size: 0.9rem; color: #94a3b8; margin-top: 4px; }
+
+  /* Lists */
+  .feature-list { list-style: none; margin-top: 24px; }
+  .feature-list li {
+    padding: 12px 0; font-size: 1.1rem; color: #cbd5e1;
+    display: flex; align-items: flex-start; gap: 12px; line-height: 1.5;
+  }
+  .feature-list li::before { content: "→"; color: #60a5fa; font-weight: 700; flex-shrink: 0; }
+
+  /* Tech Badges */
+  .tech-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 20px; border-radius: 100px; font-size: 0.9rem; font-weight: 600;
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .badge-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+
+  /* Flow/Timeline */
+  .flow-step {
+    text-align: center; padding: 24px;
+    background: rgba(255,255,255,0.03); border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .flow-number {
+    width: 40px; height: 40px; border-radius: 50%; background: var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1.1rem; margin: 0 auto 12px;
+  }
+
+  /* Table */
+  .slide-table {
+    width: 100%; border-collapse: collapse; margin-top: 32px; font-size: 0.95rem;
+  }
+  .slide-table th {
+    text-align: left; padding: 14px 20px; font-weight: 700; color: #60a5fa;
+    border-bottom: 2px solid rgba(59,130,246,0.2); font-size: 0.85rem;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .slide-table td {
+    padding: 14px 20px; color: #cbd5e1; border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .slide-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  /* Navigation */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 40px;
+    background: rgba(2,6,23,0.9); backdrop-filter: blur(16px);
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .nav-btn {
+    padding: 10px 24px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.05); color: white; font-weight: 600; font-size: 0.9rem;
+    cursor: pointer; transition: background 0.2s, border-color 0.2s;
+    font-family: 'Inter', sans-serif;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(59,130,246,0.4); }
+  .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .nav-progress {
+    font-size: 0.85rem; color: #64748b; font-weight: 600;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .progress-bar-bg {
+    width: 200px; height: 4px; background: rgba(255,255,255,0.1); border-radius: 100px;
+  }
+  .progress-bar-fill {
+    height: 100%; background: var(--blue); border-radius: 100px; transition: width 0.4s;
+  }
+
+  /* Decorative */
+  .glow {
+    position: absolute; width: 400px; height: 400px; border-radius: 50%;
+    filter: blur(120px); opacity: 0.15; pointer-events: none;
+  }
+  .glow-blue { background: #3b82f6; top: -100px; right: -100px; }
+  .glow-purple { background: #8b5cf6; bottom: -100px; left: -100px; }
+
+  .divider { width: 80px; height: 4px; background: var(--blue); border-radius: 100px; margin: 24px 0; }
+
+  /* Shield Logo */
+  .shield-logo {
+    width: 80px; height: 80px; margin-bottom: 24px;
+    background: linear-gradient(135deg, #2563eb, #4f46e5);
+    border-radius: 20px; display: flex; align-items: center; justify-content: center;
+    font-size: 2.5rem; font-weight: 900; color: white;
+    box-shadow: 0 0 40px rgba(59,130,246,0.3);
+  }
+
+  .flex-center { display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+
+  .pill {
+    display: inline-block; padding: 4px 14px; border-radius: 100px; font-size: 0.75rem;
+    font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .pill-blue { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .pill-green { background: rgba(16,185,129,0.15); color: #34d399; }
+  .pill-orange { background: rgba(245,158,11,0.15); color: #fbbf24; }
+  .pill-purple { background: rgba(139,92,246,0.15); color: #a78bfa; }
+
+  /* Keyboard hints */
+  .key-hint {
+    position: fixed; bottom: 80px; right: 40px; font-size: 0.75rem;
+    color: #475569; z-index: 50;
+  }
+  .key-hint kbd {
+    background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+    padding: 2px 8px; border-radius: 4px; font-family: 'Inter', sans-serif;
+    font-size: 0.7rem;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck" id="deck">
+
+  <!-- ====================== SLIDE 1: TITLE ====================== -->
+  <div class="slide bg-gradient active" data-slide="0">
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-purple"></div>
+    <div class="flex-center" style="height: 100%;">
+      <div class="shield-logo">A</div>
+      <div class="super-title" style="margin-bottom: 8px;">AwareGuard <span class="highlight">v2.0</span></div>
+      <div style="font-size: 1.4rem; color: #94a3b8; font-weight: 400; max-width: 700px; margin-top: 16px; line-height: 1.7;">
+        An AI-Powered Cybersecurity Awareness & Scam Prevention Platform
+      </div>
+      <div class="divider" style="margin: 32px auto;"></div>
+      <div style="font-size: 1rem; color: #64748b;">
+        Internship Project Presentation &nbsp;•&nbsp; February 2026
+      </div>
+      <div style="margin-top: 32px; font-size: 1.1rem; color: #94a3b8;">
+        🌐 <span class="highlight" style="font-weight: 600;">awareguard.tech</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 2: THE PROBLEM ====================== -->
+  <div class="slide bg-dark" data-slide="1">
+    <div class="glow glow-blue" style="top: 50%; right: -200px;"></div>
+    <span class="section-label">The Problem</span>
+    <div class="title">Online Fraud is a <span style="color: #f87171;">Global Crisis</span></div>
+    <div class="subtitle" style="max-width: 700px;">
+      Millions of people fall victim to scams every year. Awareness is the most effective defense — yet most people receive zero training.
+    </div>
+    <div class="grid-3" style="margin-top: 48px;">
+      <div class="card" style="text-align: center;">
+        <div class="stat-number" style="color: #f87171;">$55B+</div>
+        <div class="stat-label">Lost to online fraud worldwide per year</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="stat-number" style="color: #fbbf24;">300%</div>
+        <div class="stat-label">Increase in phishing attacks since 2023</div>
+      </div>
+      <div class="card" style="text-align: center;">
+        <div class="stat-number" style="color: #a78bfa;">1 in 3</div>
+        <div class="stat-label">People targeted by scams annually</div>
+      </div>
+    </div>
+    <div style="margin-top: 40px; padding: 24px 32px; background: rgba(239,68,68,0.08); border: 1px solid rgba(239,68,68,0.2); border-radius: 12px; max-width: 750px;">
+      <p style="color: #fca5a5; font-size: 1.05rem; line-height: 1.6;">
+        <strong style="color: #f87171;">The gap:</strong> Traditional security training is expensive, boring, and inaccessible to everyday users. There's no interactive, AI-powered solution for the general public.
+      </p>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 3: OUR SOLUTION ====================== -->
+  <div class="slide bg-blue" data-slide="2">
+    <span class="section-label">Our Solution</span>
+    <div class="title">AwareGuard — <span class="highlight">Learn. Detect. Protect.</span></div>
+    <div class="subtitle" style="max-width: 700px;">
+      A full-stack web platform that educates users about online scams through interactive learning, AI-powered analysis, and community-driven awareness.
+    </div>
+    <div class="grid-3" style="margin-top: 48px;">
+      <div class="card">
+        <div class="card-icon" style="background: rgba(59,130,246,0.15);">📚</div>
+        <h3>Expert-Led Learning</h3>
+        <p>Structured modules covering phishing, job scams, identity theft, financial fraud, and more — with quizzes and XP progression.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(139,92,246,0.15);">🤖</div>
+        <h3>AI Scam Analyzer</h3>
+        <p>Paste any suspicious message, link, or job offer — our AI instantly analyzes it and tells you if it's a scam.</p>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(16,185,129,0.15);">🛡️</div>
+        <h3>Community Protection</h3>
+        <p>Users share real scam stories, report incidents, and help protect others through collective awareness.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 4: KEY FEATURES ====================== -->
+  <div class="slide bg-dark" data-slide="3">
+    <div class="glow glow-purple" style="top: -100px; left: 50%;"></div>
+    <span class="section-label">Key Features</span>
+    <div class="title">What Makes AwareGuard <span class="highlight">Unique</span></div>
+    <div class="grid-2" style="margin-top: 40px;">
+      <div>
+        <ul class="feature-list">
+          <li><strong class="highlight">Gamified Learning System</strong> — XP points, levels, streaks, badges, and progress tracking keep users engaged</li>
+          <li><strong class="highlight">AI-Powered Chat Assistant</strong> — Real-time scam analysis using OpenAI/Google AI with markdown-rendered responses</li>
+          <li><strong class="highlight">Microlearning Modules</strong> — Bite-sized lessons with checkpoint quizzes, key takeaways, and visual aids</li>
+          <li><strong class="highlight">Scam Reporting System</strong> — Users can report phishing, fraud, and other scams for admin review</li>
+          <li><strong class="highlight">Community Stories</strong> — Real experiences shared by victims to help others recognize scam patterns</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="feature-list">
+          <li><strong class="highlight-green">Dark Mode + Responsive</strong> — Full dark/light/system theme support, optimized for all devices</li>
+          <li><strong class="highlight-green">Google OAuth + JWT Auth</strong> — Secure authentication with social login and password reset via email</li>
+          <li><strong class="highlight-green">Paystack Payments</strong> — Premium subscriptions with inline checkout and webhook verification</li>
+          <li><strong class="highlight-green">Admin Dashboard</strong> — Full management panel for users, reports, stories, payments, and settings</li>
+          <li><strong class="highlight-green">Enterprise Training</strong> — Corporate plans with team management for organizations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 5: LEARNING PLATFORM DEEP DIVE ====================== -->
+  <div class="slide bg-indigo" data-slide="4">
+    <span class="section-label">Core Module</span>
+    <div class="title">Interactive <span class="highlight-purple">Learning Platform</span></div>
+    <div class="grid-2" style="margin-top: 40px;">
+      <div>
+        <div class="subtitle" style="margin-top: 0; font-size: 1.15rem;">
+          A structured, gamified learning experience that takes users from beginner to expert in cybersecurity awareness.
+        </div>
+        <div style="margin-top: 32px;">
+          <div style="display: flex; gap: 12px; margin-bottom: 20px;">
+            <span class="pill pill-green">Beginner</span>
+            <span class="pill pill-orange">Intermediate</span>
+            <span class="pill pill-purple">Expert</span>
+          </div>
+          <ul class="feature-list" style="margin-top: 0;">
+            <li>6+ modules covering phishing, job scams, passwords, financial fraud, social engineering, identity theft</li>
+            <li>Checkpoint quizzes after each lesson with instant feedback and confetti on correct answers</li>
+            <li>XP leveling system with 10 tiers (0 → 1850 XP)</li>
+            <li>Guest mode with 5-lesson preview, then sign-up wall</li>
+            <li>AI Learning Tutor for in-context help during lessons</li>
+          </ul>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="background: rgba(139,92,246,0.08); border-color: rgba(139,92,246,0.2);">
+          <h3 style="color: #a78bfa; margin-bottom: 16px;">Lesson Structure</h3>
+          <div style="space-y: 12px;">
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-bottom: 8px;">
+              <span style="color: #60a5fa;">📖</span> <span style="color: #cbd5e1;">Text Lesson with rich content</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-bottom: 8px;">
+              <span style="color: #34d399;">🎯</span> <span style="color: #cbd5e1;">Key Takeaways summary</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-bottom: 8px;">
+              <span style="color: #fbbf24;">🖼️</span> <span style="color: #cbd5e1;">Visual Aid / Diagram</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px; margin-bottom: 8px;">
+              <span style="color: #f87171;">✅</span> <span style="color: #cbd5e1;">Checkpoint Quiz (MCQ)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(255,255,255,0.04); border-radius: 8px;">
+              <span style="color: #a78bfa;">🏆</span> <span style="color: #cbd5e1;">XP Reward + Next Lesson</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 6: TECH STACK ====================== -->
+  <div class="slide bg-dark" data-slide="5">
+    <div class="glow glow-blue" style="bottom: -100px; right: -100px;"></div>
+    <span class="section-label">Technology</span>
+    <div class="title">Full-Stack <span class="highlight">Architecture</span></div>
+
+    <div class="grid-2" style="margin-top: 40px;">
+      <div>
+        <h3 style="font-size: 1.1rem; color: #60a5fa; margin-bottom: 16px; font-weight: 700;">Frontend</h3>
+        <div class="badge-row">
+          <span class="tech-badge">⚛️ React 19</span>
+          <span class="tech-badge">⚡ Vite 6</span>
+          <span class="tech-badge">🎨 Tailwind CSS v4</span>
+          <span class="tech-badge">🎬 Framer Motion</span>
+          <span class="tech-badge">🧭 React Router 7</span>
+          <span class="tech-badge">✨ Lucide Icons</span>
+        </div>
+
+        <h3 style="font-size: 1.1rem; color: #34d399; margin-bottom: 16px; margin-top: 32px; font-weight: 700;">Backend</h3>
+        <div class="badge-row">
+          <span class="tech-badge">🟢 Node.js</span>
+          <span class="tech-badge">🚂 Express 5</span>
+          <span class="tech-badge">🍃 MongoDB + Mongoose</span>
+          <span class="tech-badge">🔐 JWT + Passport</span>
+        </div>
+
+        <h3 style="font-size: 1.1rem; color: #a78bfa; margin-bottom: 16px; margin-top: 32px; font-weight: 700;">AI & Services</h3>
+        <div class="badge-row">
+          <span class="tech-badge">🧠 OpenAI API</span>
+          <span class="tech-badge">💳 Paystack</span>
+          <span class="tech-badge">📧 Nodemailer</span>
+          <span class="tech-badge">🔑 Google OAuth 2.0</span>
+        </div>
+      </div>
+      <div>
+        <div class="card" style="padding: 28px;">
+          <h3 style="color: #fbbf24; margin-bottom: 20px;">Deployment Architecture</h3>
+          <table class="slide-table" style="margin-top: 0;">
+            <tr>
+              <td style="color: #60a5fa; font-weight: 600;">Frontend</td>
+              <td>Vercel — awareguard.tech</td>
+            </tr>
+            <tr>
+              <td style="color: #34d399; font-weight: 600;">Backend API</td>
+              <td>Render — awareguard-backend.onrender.com</td>
+            </tr>
+            <tr>
+              <td style="color: #a78bfa; font-weight: 600;">Database</td>
+              <td>MongoDB Atlas (Cloud)</td>
+            </tr>
+            <tr>
+              <td style="color: #fbbf24; font-weight: 600;">Domain</td>
+              <td>awareguard.tech (Custom)</td>
+            </tr>
+            <tr>
+              <td style="color: #f87171; font-weight: 600;">Version Control</td>
+              <td>GitHub — CI/CD auto-deploy</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 7: SYSTEM ARCHITECTURE ====================== -->
+  <div class="slide bg-blue" data-slide="6">
+    <span class="section-label">Architecture</span>
+    <div class="title">How It All <span class="highlight">Connects</span></div>
+
+    <div class="grid-4" style="margin-top: 48px;">
+      <div class="flow-step">
+        <div class="flow-number">1</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">User Interface</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8;">React SPA with Tailwind CSS, dark mode, responsive design</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-number" style="background: var(--green);">2</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">REST API</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8;">Express.js with JWT auth, rate limiting, CORS, webhook handling</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-number" style="background: var(--purple);">3</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">AI Engine</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8;">OpenAI GPT for scam analysis, context-aware chat, learning tutor</p>
+      </div>
+      <div class="flow-step">
+        <div class="flow-number" style="background: var(--orange);">4</div>
+        <h3 style="font-size: 1rem; font-weight: 700; margin-bottom: 8px;">Data Layer</h3>
+        <p style="font-size: 0.85rem; color: #94a3b8;">MongoDB Atlas — Users, Progress, Quizzes, Reports, Stories, Payments</p>
+      </div>
+    </div>
+
+    <div style="margin-top: 40px;">
+      <h3 style="font-size: 1.1rem; color: #60a5fa; margin-bottom: 20px; font-weight: 700;">API Endpoints (12+ routes)</h3>
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #34d399; font-weight: 600;">/api/auth</span> — Auth & OAuth
+        </div>
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #60a5fa; font-weight: 600;">/api/ask</span> — AI Analyzer
+        </div>
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #a78bfa; font-weight: 600;">/api/learning</span> — Progress
+        </div>
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #fbbf24; font-weight: 600;">/api/payments</span> — Paystack
+        </div>
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #f87171; font-weight: 600;">/api/reports</span> — Scam Reports
+        </div>
+        <div style="padding: 12px 16px; background: rgba(255,255,255,0.05); border-radius: 8px; font-size: 0.9rem;">
+          <span style="color: #fb923c; font-weight: 600;">/api/stories</span> — Community
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 8: ALL PAGES ====================== -->
+  <div class="slide bg-dark" data-slide="7">
+    <div class="glow glow-purple" style="top: 0; right: -200px;"></div>
+    <span class="section-label">Platform Overview</span>
+    <div class="title">20+ Pages & <span class="highlight">Components</span></div>
+
+    <div class="grid-2" style="margin-top: 32px;">
+      <div>
+        <h3 style="color: #60a5fa; font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Public Pages</h3>
+        <table class="slide-table" style="margin-top: 0; font-size: 0.85rem;">
+          <tr><td style="color: #60a5fa; font-weight: 600;">Home</td><td>Landing page with hero, stats, testimonials</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Learn</td><td>Full learning platform with paths & modules</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Ask AI</td><td>AI-powered scam detection chatbot</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Scams</td><td>Encyclopedia of 6 scam categories</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Stories</td><td>Community scam experiences</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Hub</td><td>Central resource navigation</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Pricing</td><td>Free / Premium / Enterprise plans</td></tr>
+          <tr><td style="color: #60a5fa; font-weight: 600;">Contact</td><td>Enterprise & general inquiries</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3 style="color: #34d399; font-size: 1rem; font-weight: 700; margin-bottom: 12px;">Authenticated / Admin</h3>
+        <table class="slide-table" style="margin-top: 0; font-size: 0.85rem;">
+          <tr><td style="color: #34d399; font-weight: 600;">Report</td><td>Submit scam reports (protected)</td></tr>
+          <tr><td style="color: #34d399; font-weight: 600;">Sign In / Up</td><td>Email + Google OAuth authentication</td></tr>
+          <tr><td style="color: #34d399; font-weight: 600;">Password Reset</td><td>Token-based email recovery</td></tr>
+          <tr><td style="color: #fbbf24; font-weight: 600;">Admin Dashboard</td><td>Overview & analytics</td></tr>
+          <tr><td style="color: #fbbf24; font-weight: 600;">Admin Users</td><td>User management</td></tr>
+          <tr><td style="color: #fbbf24; font-weight: 600;">Admin Reports</td><td>Review submitted scam reports</td></tr>
+          <tr><td style="color: #fbbf24; font-weight: 600;">Admin Stories</td><td>Moderate community content</td></tr>
+          <tr><td style="color: #fbbf24; font-weight: 600;">Admin Payments</td><td>Transaction history</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 9: SECURITY & QUALITY ====================== -->
+  <div class="slide bg-green" data-slide="8">
+    <span class="section-label">Quality & Security</span>
+    <div class="title">Production-Grade <span class="highlight-green">Engineering</span></div>
+    <div class="grid-2" style="margin-top: 40px;">
+      <div>
+        <h3 style="color: #34d399; margin-bottom: 20px;">Security Measures</h3>
+        <ul class="feature-list" style="margin-top: 0;">
+          <li>JWT token authentication with secure httpOnly handling</li>
+          <li>Google OAuth 2.0 social login integration</li>
+          <li>bcrypt password hashing (salt rounds)</li>
+          <li>CORS whitelist — only allowed origins</li>
+          <li>API rate limiting to prevent abuse</li>
+          <li>DOMPurify sanitization on all AI output</li>
+          <li>Paystack webhook signature verification</li>
+          <li>Protected routes with auth middleware</li>
+        </ul>
+      </div>
+      <div>
+        <h3 style="color: #60a5fa; margin-bottom: 20px;">UI/UX Quality</h3>
+        <ul class="feature-list" style="margin-top: 0;">
+          <li>Fully responsive — tested on mobile, tablet, desktop</li>
+          <li>Dark mode / Light mode / System preference</li>
+          <li>Framer Motion animations throughout</li>
+          <li>Accessibility: ARIA labels, semantic HTML, keyboard nav</li>
+          <li>Loading states, error handling, toast notifications</li>
+          <li>Scroll-to-top on route changes</li>
+          <li>SPA routing with Vercel rewrites</li>
+          <li>Custom SVG favicon with brand identity</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 10: CHALLENGES & LEARNINGS ====================== -->
+  <div class="slide bg-dark" data-slide="9">
+    <div class="glow glow-blue" style="top: 50%; left: -200px;"></div>
+    <span class="section-label">Reflection</span>
+    <div class="title">Challenges & <span class="highlight-orange">Learnings</span></div>
+    <div class="grid-2" style="margin-top: 40px;">
+      <div>
+        <h3 style="color: #fbbf24; margin-bottom: 20px;">Challenges Faced</h3>
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1rem;">Tailwind CSS v4 Dark Mode</h3>
+          <p>Migrating to CSS-first config required a custom variant directive. Fixed across 14+ components.</p>
+        </div>
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1rem;">Mobile Responsive Layouts</h3>
+          <p>Stacked padding caused narrow content on mobile. Systematically audited and fixed all components.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1rem;">SPA Routing on Vercel</h3>
+          <p>Direct URL access returned 404. Solved with vercel.json SPA rewrites for client-side routing.</p>
+        </div>
+      </div>
+      <div>
+        <h3 style="color: #34d399; margin-bottom: 20px;">Key Learnings</h3>
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1rem;">Full-Stack Development</h3>
+          <p>Built end-to-end: React frontend, Express API, MongoDB database, third-party integrations, and deployment.</p>
+        </div>
+        <div class="card" style="margin-bottom: 16px;">
+          <h3 style="font-size: 1rem;">AI Integration</h3>
+          <p>Learned to integrate OpenAI APIs for real-time scam analysis with context-aware conversations.</p>
+        </div>
+        <div class="card">
+          <h3 style="font-size: 1rem;">Production Deployment</h3>
+          <p>Deployed to Vercel + Render with custom domain, CI/CD pipeline, environment variables, and monitoring.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 11: DEMO ====================== -->
+  <div class="slide bg-gradient" data-slide="10">
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-purple"></div>
+    <div class="flex-center" style="height: 100%;">
+      <div style="font-size: 4rem; margin-bottom: 24px;">🖥️</div>
+      <div class="super-title" style="font-size: 3.5rem;">Live <span class="highlight">Demo</span></div>
+      <div class="divider" style="margin: 24px auto;"></div>
+      <div class="subtitle" style="max-width: 600px; text-align: center;">
+        Let me walk you through the platform live at
+      </div>
+      <div style="margin-top: 32px; padding: 16px 40px; background: rgba(59,130,246,0.15); border: 2px solid rgba(59,130,246,0.3); border-radius: 16px;">
+        <span style="font-size: 1.8rem; font-weight: 800; color: #60a5fa;">awareguard.tech</span>
+      </div>
+      <div class="grid-4" style="margin-top: 48px; max-width: 800px;">
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 8px;">🏠</div>
+          <div style="font-size: 0.85rem; color: #94a3b8;">Home & Landing</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 8px;">📚</div>
+          <div style="font-size: 0.85rem; color: #94a3b8;">Learning Modules</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 8px;">🤖</div>
+          <div style="font-size: 0.85rem; color: #94a3b8;">AI Scam Analyzer</div>
+        </div>
+        <div style="text-align: center;">
+          <div style="font-size: 1.5rem; margin-bottom: 8px;">🌙</div>
+          <div style="font-size: 0.85rem; color: #94a3b8;">Dark Mode</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 12: FUTURE ROADMAP ====================== -->
+  <div class="slide bg-purple" data-slide="11">
+    <span class="section-label">What's Next</span>
+    <div class="title">Future <span class="highlight-purple">Roadmap</span></div>
+    <div class="grid-3" style="margin-top: 48px;">
+      <div class="card">
+        <div class="card-icon" style="background: rgba(59,130,246,0.15);">📱</div>
+        <h3>Mobile App</h3>
+        <p>React Native companion app for on-the-go scam detection and learning.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-blue">Phase 2</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(16,185,129,0.15);">📊</div>
+        <h3>Analytics Dashboard</h3>
+        <p>Detailed learning analytics, scam trend reports, and community insights for users.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-green">Phase 2</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(139,92,246,0.15);">🎓</div>
+        <h3>Certificates</h3>
+        <p>Downloadable completion certificates for completed learning paths and modules.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-purple">Phase 2</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(245,158,11,0.15);">🌍</div>
+        <h3>Multi-Language</h3>
+        <p>Localization support for African languages — Yoruba, Zulu, Swahili, and more.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-orange">Phase 3</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(239,68,68,0.15);">🔗</div>
+        <h3>Browser Extension</h3>
+        <p>Real-time URL and email scanning directly in the user's browser.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-orange">Phase 3</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon" style="background: rgba(6,182,212,0.15);">🏢</div>
+        <h3>Enterprise API</h3>
+        <p>RESTful API for organizations to integrate scam detection into their own platforms.</p>
+        <div style="margin-top: 12px;"><span class="pill pill-orange">Phase 3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================== SLIDE 13: THANK YOU ====================== -->
+  <div class="slide bg-gradient" data-slide="12">
+    <div class="glow glow-blue"></div>
+    <div class="glow glow-purple"></div>
+    <div class="flex-center" style="height: 100%;">
+      <div class="shield-logo" style="width: 100px; height: 100px; font-size: 3rem; border-radius: 24px;">A</div>
+      <div class="super-title" style="margin-top: 24px;">Thank <span class="highlight">You</span></div>
+      <div class="divider" style="margin: 24px auto;"></div>
+      <div class="subtitle" style="max-width: 600px; text-align: center;">
+        AwareGuard — Making the internet safer, one person at a time.
+      </div>
+      <div style="margin-top: 48px; display: flex; gap: 24px; flex-wrap: wrap; justify-content: center;">
+        <div class="tech-badge" style="font-size: 1rem;">
+          🌐 awareguard.tech
+        </div>
+        <div class="tech-badge" style="font-size: 1rem;">
+          💻 github.com/Spectre-Techie/AwareGuard-V2
+        </div>
+      </div>
+      <div style="margin-top: 48px; color: #64748b; font-size: 1.1rem;">
+        Questions & Discussion
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Navigation Bar -->
+<div class="nav-bar">
+  <button class="nav-btn" id="prevBtn" onclick="navigate(-1)" disabled>← Previous</button>
+  <div class="nav-progress">
+    <span id="slideCounter">1 / 13</span>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progressFill" style="width: 7.7%;"></div>
+    </div>
+  </div>
+  <button class="nav-btn" id="nextBtn" onclick="navigate(1)">Next →</button>
+</div>
+
+<div class="key-hint">
+  <kbd>←</kbd> <kbd>→</kbd> or click to navigate &nbsp;|&nbsp; <kbd>F</kbd> fullscreen
+</div>
+
+<script>
+  let current = 0;
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+
+  function showSlide(index) {
+    slides.forEach((s, i) => {
+      s.classList.toggle('active', i === index);
+    });
+    document.getElementById('slideCounter').textContent = `${index + 1} / ${total}`;
+    document.getElementById('progressFill').style.width = `${((index + 1) / total) * 100}%`;
+    document.getElementById('prevBtn').disabled = index === 0;
+    document.getElementById('nextBtn').disabled = index === total - 1;
+  }
+
+  function navigate(dir) {
+    const next = current + dir;
+    if (next >= 0 && next < total) {
+      current = next;
+      showSlide(current);
+    }
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); navigate(1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); navigate(-1); }
+    if (e.key === 'f' || e.key === 'F') {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        document.exitFullscreen();
+      }
+    }
+  });
+
+  // Touch swipe support
+  let touchStartX = 0;
+  document.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; });
+  document.addEventListener('touchend', (e) => {
+    const diff = touchStartX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) navigate(diff > 0 ? 1 : -1);
+  });
+</script>
+
+</body>
+</html>
