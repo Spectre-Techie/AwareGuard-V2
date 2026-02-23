@@ -102,7 +102,7 @@ const TextLesson = ({
             <div className="prose prose-lg max-w-none">
                 <div
                     className="text-slate-700 dark:text-slate-300 leading-relaxed"
-                    style={{ fontSize: '1.0625rem', lineHeight: '1.75', textAlign: 'justify' }}
+                    style={{ fontSize: '1.0625rem', lineHeight: '1.75' }}
                 >
                     {content}
                 </div>
@@ -111,7 +111,7 @@ const TextLesson = ({
             {/* Key Takeaways - Visual Learning Enhancement */}
             {keyPoints && keyPoints.length > 0 && (
                 <div
-                    className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-500/10 dark:to-indigo-500/10 border-l-4 border-blue-500 rounded-lg p-5 shadow-sm"
+                    className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-500/10 dark:to-indigo-500/10 border-l-4 border-blue-500 rounded-lg p-4 sm:p-5 shadow-sm"
                     role="complementary"
                     aria-labelledby="key-takeaways-heading"
                 >

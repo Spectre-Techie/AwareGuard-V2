@@ -458,13 +458,13 @@ const Learn = () => {
 
           {/* Guest Mode Notice - Professional Conversion */}
           {!isAuthenticated && (
-            <div className="mb-12 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-8 text-center">
-              <div className="mb-4">
+            <div className="mb-12">
+              <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-lg p-5 sm:p-8 text-center mb-6">
                 <svg className="w-12 h-12 text-blue-600 dark:text-blue-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <h3 className="text-xl font-semibold text-slate-900 dark:text-white mb-2">Track Your Progress</h3>
-                <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto mb-6">
+                <p className="text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
                   Sign in to earn XP, unlock achievements, build your learning streak, and get personalized recommendations based on your learning patterns.
                 </p>
               </div>

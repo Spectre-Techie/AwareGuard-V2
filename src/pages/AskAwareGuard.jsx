@@ -62,9 +62,16 @@ const AskAwareGuard = () => {
 
   const messagesEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const chatContainerRef = useRef(null);
 
+  // Scroll chat container to bottom (keeps input visible)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
   }, [conversations, loading]);
 
   // Auto-resize textarea
@@ -164,7 +171,7 @@ const AskAwareGuard = () => {
   const hasMessages = conversations.length > 0;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-4rem)] bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+    <div className="flex flex-col h-[calc(100dvh-4rem)] bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Header */}
       <div className="flex-shrink-0 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3">
         <div className="max-w-3xl mx-auto flex items-center gap-3">
@@ -185,7 +192,7 @@ const AskAwareGuard = () => {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto">
+      <div ref={chatContainerRef} className="flex-1 overflow-y-auto">
         <div className="max-w-3xl mx-auto px-4 py-6">
           {!hasMessages ? (
             /* Welcome State */

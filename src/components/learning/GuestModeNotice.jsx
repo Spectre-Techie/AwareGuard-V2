@@ -19,16 +19,16 @@ import { UserCircle, BarChart3, Star, Trophy, Flame, GraduationCap, Rocket, Lock
  */
 export default function GuestModeNotice({ onSignIn }) {
   return (
-    <div className="mb-8 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-xl p-8 text-white shadow-lg">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+    <div className="mb-8 bg-gradient-to-r from-blue-500 via-blue-600 to-indigo-600 rounded-xl p-5 sm:p-8 text-white shadow-lg">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 items-center">
         {/* Left Side: Message */}
         <div>
           <div className="flex items-center gap-3 mb-4">
-            <UserCircle className="w-10 h-10 text-white/90" strokeWidth={1.5} />
-            <h3 className="text-2xl font-bold">Unlock Full Learning Experience</h3>
+            <UserCircle className="w-8 h-8 sm:w-10 sm:h-10 text-white/90" strokeWidth={1.5} />
+            <h3 className="text-xl sm:text-2xl font-bold">Unlock Full Learning Experience</h3>
           </div>
           
-          <p className="text-blue-100 mb-6 text-lg">
+          <p className="text-blue-100 mb-6 text-base sm:text-lg">
             Sign in to get the most out of your learning journey with AwareGuard.
           </p>
 
@@ -95,7 +95,7 @@ export default function GuestModeNotice({ onSignIn }) {
       </div>
 
       {/* Additional Info */}
-      <div className="mt-8 pt-8 border-t border-white border-opacity-20">
+      <div className="mt-6 pt-6 sm:mt-8 sm:pt-8 border-t border-white border-opacity-20">
         <p className="text-sm text-blue-100">
           <Lock className="w-4 h-4 inline-block mr-1" />
           <span className="font-semibold">Your data is secure:</span> We never sell your learning data. Your privacy is our priority.

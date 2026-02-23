@@ -88,7 +88,7 @@ const CheckpointQuiz = ({ quiz, onComplete, lessonTitle = "" }) => {
      * @returns {string} CSS classes
      */
     const getOptionClasses = (index) => {
-        const baseClasses = "w-full text-left p-4 rounded-lg border-2 transition-all duration-200 font-medium text-base";
+        const baseClasses = "w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-all duration-200 font-medium text-sm sm:text-base";
 
         if (!showFeedback) {
             // Before submission
@@ -110,7 +110,7 @@ const CheckpointQuiz = ({ quiz, onComplete, lessonTitle = "" }) => {
 
     return (
         <div
-            className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-500/10 dark:to-pink-500/10 border-2 border-purple-200 dark:border-purple-500/30 rounded-xl p-6 shadow-sm"
+            className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-500/10 dark:to-pink-500/10 border-2 border-purple-200 dark:border-purple-500/30 rounded-xl p-4 sm:p-6 shadow-sm"
             role="region"
             aria-labelledby="checkpoint-quiz-heading"
         >

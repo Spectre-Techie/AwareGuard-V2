@@ -158,7 +158,7 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
                   </div>
                 )}
 
-                <div className="p-8">
+                <div className="p-5 sm:p-8">
                   {/* Plan Header */}
                   <div className="flex items-start justify-between mb-4">
                     <div>
@@ -216,7 +216,7 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
         </div>
 
         {/* Use Cases */}
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-xl p-12 mb-16">
+        <div className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-500/10 dark:to-purple-500/10 rounded-xl p-6 sm:p-12 mb-12 sm:mb-16">
           <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-8 text-center">
             Trusted by Organizations Like:
           </h3>
@@ -253,9 +253,9 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
         </div>
 
         {/* Final CTA */}
-        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-12 text-center text-white">
-          <h3 className="text-3xl font-bold mb-4">Ready to Protect Your Organization?</h3>
-          <p className="text-lg mb-8 text-purple-100">
+        <div className="bg-gradient-to-r from-purple-600 to-blue-600 rounded-xl p-6 sm:p-12 text-center text-white">
+          <h3 className="text-2xl sm:text-3xl font-bold mb-4">Ready to Protect Your Organization?</h3>
+          <p className="text-base sm:text-lg mb-6 sm:mb-8 text-purple-100">
             Schedule a demo with our security team to see how AwareGuard Enterprise can transform your organization's security culture.
           </p>
           <button
