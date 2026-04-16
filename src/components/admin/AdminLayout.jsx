@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation, Outlet } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,
@@ -28,11 +29,16 @@ const NAV_ITEMS = [
 export default function AdminLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
-  const { user, logout } = useAuth();
+  const { user, logout, isLoggingOut, logoutProgress } = useAuth();
 
   const isActive = (path, exact = false) => {
     if (exact) return location.pathname === path;
     return location.pathname.startsWith(path);
+  };
+
+  const handleLogout = async () => {
+    if (isLoggingOut) return;
+    await logout();
   };
 
   const SidebarContent = () => (
@@ -83,7 +89,7 @@ export default function AdminLayout() {
           <span>Back to Site</span>
         </Link>
 
-        <div className="flex items-center gap-3 px-3 py-2">
+        <div className="flex items-center gap-3 px-3 py-2 relative">
           <div className="w-8 h-8 bg-blue-500/20 rounded-full flex items-center justify-center">
             <span className="text-blue-400 text-sm font-bold">
               {user?.name?.[0]?.toUpperCase() || 'A'}
@@ -94,12 +100,26 @@ export default function AdminLayout() {
             <p className="text-xs text-slate-400 truncate">{user?.email}</p>
           </div>
           <button
-            onClick={logout}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-red-400 hover:bg-slate-700/50 transition-all"
-            title="Logout"
+            onClick={handleLogout}
+            disabled={isLoggingOut}
+            className={`p-1.5 rounded-lg transition-all ${
+              isLoggingOut
+                ? 'text-red-300 bg-red-500/20 cursor-wait'
+                : 'text-slate-400 hover:text-red-400 hover:bg-slate-700/50'
+            }`}
+            title={isLoggingOut ? `Signing out... ${logoutProgress}%` : 'Logout'}
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className={`w-4 h-4 ${isLoggingOut ? 'animate-pulse' : ''}`} />
           </button>
+
+          {isLoggingOut && (
+            <span className="absolute left-3 right-3 bottom-0 h-0.5 bg-slate-700 rounded-full overflow-hidden">
+              <span
+                className="block h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-150"
+                style={{ width: `${logoutProgress}%` }}
+              />
+            </span>
+          )}
         </div>
       </div>
     </div>
@@ -107,6 +127,26 @@ export default function AdminLayout() {
 
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
+      <AnimatePresence>
+        {isLoggingOut && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed top-0 left-0 right-0 z-[90] pointer-events-none"
+          >
+            <div className="h-1 bg-slate-700/40">
+              <motion.div
+                className="h-full bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-600"
+                initial={{ width: '0%' }}
+                animate={{ width: `${logoutProgress}%` }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Desktop Sidebar */}
       <aside className="hidden lg:flex lg:flex-col w-64 bg-slate-900 flex-shrink-0">
         <SidebarContent />
