@@ -19,8 +19,6 @@ import PathSelector from "../components/learning/PathSelector";
 import ModuleGrid from "../components/learning/ModuleGrid";
 import ModuleViewer from "../components/learning/ModuleViewer";
 import GuestModeNotice from "../components/learning/GuestModeNotice";
-import PremiumUpgrade from "../components/learning/PremiumUpgrade";
-import CorporateTraining from "../components/learning/CorporateTraining";
 import ErrorBoundary from "../components/ErrorBoundary";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Clock, CheckCircle2, Zap, Star, Lock, Info, Users, ChevronRight, ShieldCheck, BookOpen, TrendingUp, Award } from "lucide-react";
@@ -75,7 +73,7 @@ const Learn = () => {
       return;
     }
     if (module.premium && !isPremium) {
-      setShowPremiumInfo(true);
+      handleUpgrade();
       return;
     }
     setSelectedModule(module);
@@ -565,22 +563,6 @@ const Learn = () => {
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      {/* Premium Upgrade Section - Professional */}
-      {!isPremium && (
-        <section className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-16 md:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <PremiumUpgrade onUpgrade={handleUpgrade} />
-          </div>
-        </section>
-      )}
-
-      {/* Corporate Training Section */}
-      <section className="bg-slate-50 dark:bg-slate-950 py-16 md:py-20 border-t border-slate-200 dark:border-slate-800">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <CorporateTraining onContactSales={handleContactSales} />
         </div>
       </section>
 

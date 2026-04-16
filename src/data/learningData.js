@@ -2663,15 +2663,15 @@ export const PREMIUM_FEATURES = {
 
 export const PRICING = {
   premium: {
-    monthly: 9.99,
-    annually: 99.99,
-    currency: "USD",
+    monthly: 5000,
+    annually: 50000,
+    currency: "NGN",
     savings: "17%",
   },
   enterprise: {
-    base: 499,
-    perUser: 4.99,
-    currency: "USD",
+    base: 150000,
+    perUser: 5000,
+    currency: "NGN",
     note: "Custom pricing available",
   },
 };

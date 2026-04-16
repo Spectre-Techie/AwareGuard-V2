@@ -18,14 +18,22 @@ export default function SignUp() {
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
 
+  const passwordChecks = [
+    { label: 'At least 8 characters', valid: password.length >= 8 },
+    { label: 'At least 1 uppercase letter', valid: /[A-Z]/.test(password) },
+    { label: 'At least 1 number', valid: /[0-9]/.test(password) },
+    { label: 'At least 1 symbol', valid: /[^A-Za-z0-9\s]/.test(password) },
+  ];
+
+  const hasTypedPassword = password.length > 0;
+  const passwordValid = passwordChecks.every((rule) => rule.valid);
   const passwordsMatch = password === confirmPassword;
-  const passwordValid = password.length >= 8;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!passwordValid) {
-      setError('Password must be at least 8 characters');
+      setError('Password must be at least 8 characters and include an uppercase letter, a number, and a symbol');
       return;
     }
 
@@ -139,7 +147,7 @@ export default function SignUp() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                  placeholder="John Doe"
+                  placeholder="Full name"
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
                 />
               </div>
@@ -188,12 +196,22 @@ export default function SignUp() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {password && (
-                <p className={`text-xs mt-2 flex items-center gap-1 ${passwordValid ? 'text-green-600 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
-                  {passwordValid ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
-                  {passwordValid ? 'Password is strong enough' : 'Must be at least 8 characters'}
-                </p>
-              )}
+              <div className="mt-2 space-y-1.5">
+                {passwordChecks.map((rule) => {
+                  const ruleClass = rule.valid
+                    ? 'text-green-600 dark:text-green-400'
+                    : hasTypedPassword
+                      ? 'text-red-500 dark:text-red-400'
+                      : 'text-slate-500 dark:text-slate-400';
+
+                  return (
+                    <p key={rule.label} className={`text-xs flex items-center gap-1 ${ruleClass}`}>
+                      {rule.valid ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                      {rule.label}
+                    </p>
+                  );
+                })}
+              </div>
             </div>
 
             <div>

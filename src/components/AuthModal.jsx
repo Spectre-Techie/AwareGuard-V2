@@ -1,7 +1,7 @@
 // src/components/AuthModal.jsx
 import { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { X, ShieldCheck } from "lucide-react";
+import { X, ShieldCheck, Check } from "lucide-react";
 
 /**
  * AuthModal — Reusable authentication modal with dark mode support.
@@ -16,9 +16,22 @@ export default function AuthModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  const passwordChecks = [
+    { label: "At least 8 characters", valid: form.password.length >= 8 },
+    { label: "At least 1 uppercase letter", valid: /[A-Z]/.test(form.password) },
+    { label: "At least 1 number", valid: /[0-9]/.test(form.password) },
+    { label: "At least 1 symbol", valid: /[^A-Za-z0-9\s]/.test(form.password) },
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
+    if (mode === "signup" && !passwordValid) {
+      setError("Password must be at least 8 characters and include an uppercase letter, a number, and a symbol.");
+      return;
+    }
+
     try {
       if (mode === "signin") {
         await signin({ email: form.email, password: form.password });
@@ -33,6 +46,9 @@ export default function AuthModal({ isOpen, onClose }) {
 
   const inputClasses =
     "w-full border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors";
+
+  const hasTypedPassword = form.password.length > 0;
+  const passwordValid = passwordChecks.every((rule) => rule.valid);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4">
@@ -99,6 +115,25 @@ export default function AuthModal({ isOpen, onClose }) {
             required
           />
 
+          {mode === "signup" && (
+            <div className="space-y-1">
+              {passwordChecks.map((rule) => {
+                const ruleClass = rule.valid
+                  ? "text-green-600 dark:text-green-400"
+                  : hasTypedPassword
+                    ? "text-red-500 dark:text-red-400"
+                    : "text-slate-500 dark:text-slate-400";
+
+                return (
+                  <p key={rule.label} className={`text-xs flex items-center gap-1 ${ruleClass}`}>
+                    {rule.valid ? <Check className="w-3.5 h-3.5" /> : <X className="w-3.5 h-3.5" />}
+                    {rule.label}
+                  </p>
+                );
+              })}
+            </div>
+          )}
+
           {mode === "signin" && (
             <div className="text-right">
               <a
@@ -112,7 +147,8 @@ export default function AuthModal({ isOpen, onClose }) {
 
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors shadow-md shadow-blue-600/25"
+            disabled={mode === "signup" && !passwordValid}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition-colors shadow-md shadow-blue-600/25 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {mode === "signin" ? "Sign In" : "Sign Up"}
           </button>

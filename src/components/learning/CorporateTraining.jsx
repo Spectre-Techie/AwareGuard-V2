@@ -27,7 +27,7 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
       id: "team",
       name: "Team Training",
       size: "5-50 people",
-      startPrice: 499,
+      startPrice: 150000,
       priceFormat: "one-time",
       features: [
         "Customize training modules",
@@ -43,7 +43,7 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
       id: "organization",
       name: "Organization Plan",
       size: "50-1000 people",
-      startPrice: 1999,
+      startPrice: 700000,
       priceFormat: "annual",
       features: [
         "Everything in Team",
@@ -61,7 +61,7 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
       id: "enterprise",
       name: "Enterprise",
       size: "1000+ people",
-      startPrice: 9999,
+      startPrice: 1500000,
       priceFormat: "annual",
       features: [
         "Everything in Organization",
@@ -174,14 +174,14 @@ const CorporateTraining = ({ onContactSales = () => {} }) => {
                   <div className="border-t border-b border-slate-200 dark:border-slate-700 py-6 mb-6">
                     <div className="flex items-baseline gap-1 mb-2">
                       <span className="text-3xl font-bold text-slate-900 dark:text-white">
-                        ${plan.startPrice}
+                        ₦{plan.startPrice.toLocaleString()}
                       </span>
                       <span className="text-slate-600 dark:text-slate-400 text-sm">
                         {plan.priceFormat === "annual" ? "/year" : " one-time"}
                       </span>
                     </div>
                     <p className="text-xs text-slate-500 dark:text-slate-500">
-                      {plan.priceFormat === "annual" && "+ $4.99 per additional user/year"}
+                      {plan.priceFormat === "annual" && "+ ₦5,000 per additional user/year"}
                     </p>
                     <p className="text-xs text-purple-600 font-medium mt-2">
                       {plan.use}

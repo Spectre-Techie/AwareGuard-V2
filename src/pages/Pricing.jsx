@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
 import { Check, AlertCircle, Sparkles, Building2, ChevronRight } from 'lucide-react';
 import { PREMIUM_FEATURES } from '../data/learningData';
+import PremiumUpgrade from '../components/learning/PremiumUpgrade';
+import CorporateTraining from '../components/learning/CorporateTraining';
 
 const Pricing = () => {
   const navigate = useNavigate();
@@ -13,7 +15,7 @@ const Pricing = () => {
   const [error, setError] = useState('');
   const [paystackKey, setPaystackKey] = useState('');
 
-  const pricing = { monthly: 9999, annual: 99999, currency: 'NGN' };
+  const pricing = { monthly: 5000, annual: 50000, currency: 'NGN' };
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -187,6 +189,18 @@ const Pricing = () => {
               )}
             </motion.div>
           ))}
+        </div>
+
+        {/* Premium Membership Section (moved from Learn) */}
+        {!user?.isPremium && (
+          <div className="mt-16">
+            <PremiumUpgrade onUpgrade={() => navigate('/learn?upgraded=true')} />
+          </div>
+        )}
+
+        {/* Enterprise Training Section (moved from Learn) */}
+        <div className="mt-16">
+          <CorporateTraining onContactSales={handleContactSales} />
         </div>
 
         {/* FAQ */}

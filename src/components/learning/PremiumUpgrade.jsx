@@ -28,18 +28,18 @@ const PremiumUpgrade = ({ onUpgrade = () => { } }) => {
   const [toast, setToast] = useState(null);
   const [pricing, setPricing] = useState({
     monthly: {
-      price: 9999,
-      amountInNGN: "₦9,999",
+      price: 5000,
+      amountInNGN: "₦5,000",
       period: "month",
       discount: "0%",
       saving: "Pay monthly, cancel anytime",
     },
     annual: {
-      price: 99999,
-      amountInNGN: "₦99,999",
+      price: 50000,
+      amountInNGN: "₦50,000",
       period: "year",
       discount: "17%",
-      saving: "Save ₦19,998/year",
+      saving: "Save ₦10,000/year",
     },
   });
 
