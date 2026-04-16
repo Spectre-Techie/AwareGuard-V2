@@ -306,7 +306,8 @@ const AskAwareGuard = () => {
           <div className="flex items-end gap-3 bg-white dark:bg-slate-900 rounded-2xl p-2 border border-slate-300 dark:border-slate-700 focus-within:border-blue-500 dark:focus-within:border-blue-400 transition-colors shadow-sm">
             <textarea
               ref={textareaRef}
-              className="flex-1 bg-transparent border-0 outline-none ring-0 resize-none appearance-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm py-2 px-2 min-h-[40px] max-h-[160px] focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0"
+              className="flex-1 bg-transparent !border-0 !outline-none !ring-0 !shadow-none resize-none appearance-none text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-sm py-2 px-2 min-h-[40px] max-h-[160px] focus:!border-0 focus:!outline-none focus:!ring-0 focus:!shadow-none focus-visible:!border-0 focus-visible:!outline-none focus-visible:!ring-0 focus-visible:!shadow-none"
+              style={{ border: "none", outline: "none", boxShadow: "none", WebkitBoxShadow: "none" }}
               placeholder="Ask about a suspicious message, link, or situation..."
               value={userInput}
               onChange={(e) => setUserInput(e.target.value)}
