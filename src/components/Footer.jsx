@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShieldCheck, Github, Twitter, Linkedin, Mail, Heart, ArrowRight } from 'lucide-react';
+import { ShieldCheck, Github, Twitter, Linkedin, Mail, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
   const platformLinks = [
@@ -123,8 +123,9 @@ const Footer = () => {
           <p className="text-xs text-slate-500">
             &copy; {new Date().getFullYear()} AwareGuard. All rights reserved.
           </p>
-          <p className="text-xs text-slate-500 flex items-center gap-1">
-            Made with <Heart size={12} className="text-red-400" fill="currentColor" /> for a safer internet
+          <p className="text-xs text-slate-500 flex items-center gap-1.5">
+            <ShieldCheck size={12} className="text-blue-400" />
+            Built for a safer internet
           </p>
         </div>
       </div>

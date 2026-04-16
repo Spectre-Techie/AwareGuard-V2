@@ -67,7 +67,7 @@ const Contact = () => {
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  placeholder="John Doe" />
+                  placeholder="Full name" />
               </div>
             </div>
 
@@ -79,7 +79,7 @@ const Contact = () => {
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                 <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required
                   className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-                  placeholder="john@company.com" />
+                  placeholder="you@example.com" />
               </div>
             </div>
 
