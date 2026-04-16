@@ -404,7 +404,7 @@ export default function ModuleViewer({
                     <LearningAI
                       module={module}
                       lesson={currentLesson}
-                      currentLessonIndex={currentLessonIndex}
+                      lessonIndex={currentLessonIndex}
                       quiz={module.quiz}
                       isCompact={true}
                     />

@@ -22,13 +22,14 @@ const LearningAI = ({
   lesson,
   lessonIndex = 0,
   quiz = null,
+  isCompact = false,
   onClose = () => {},
 }) => {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [conversations, setConversations] = useState([]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(isCompact);
 
   const answerRef = useRef(null);
   const inputRef = useRef(null);
@@ -128,10 +129,23 @@ Keep responses concise and educational. Focus on practical cybersecurity knowled
 
   // Closed state — floating button
   if (!isOpen) {
+    if (isCompact) {
+      return (
+        <button
+          onClick={() => setIsOpen(true)}
+          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-3 rounded-lg shadow-md hover:shadow-lg transition-all font-bold flex items-center justify-center gap-2"
+          title="Open AI Tutor"
+        >
+          <Bot className="w-5 h-5" />
+          Open AI Tutor
+        </button>
+      );
+    }
+
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all font-bold flex items-center gap-2 z-50"
+        className="fixed bottom-4 right-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-3 sm:px-4 py-3 rounded-full shadow-lg hover:shadow-xl transition-all font-bold flex items-center gap-2 z-50 text-sm sm:text-base"
         title="Open AI Tutor"
       >
         <Bot className="w-5 h-5" />
@@ -140,13 +154,17 @@ Keep responses concise and educational. Focus on practical cybersecurity knowled
     );
   }
 
+  const panelClassName = isCompact
+    ? "w-full max-h-[75vh] sm:max-h-[32rem] flex flex-col bg-white dark:bg-slate-900 rounded-xl shadow-2xl dark:shadow-slate-950/50 border border-slate-200 dark:border-slate-700 overflow-hidden"
+    : "fixed bottom-3 left-3 right-3 sm:left-auto sm:right-4 bg-white dark:bg-slate-900 rounded-xl shadow-2xl dark:shadow-slate-950/50 border border-slate-200 dark:border-slate-700 w-auto sm:w-96 max-h-[78vh] sm:max-h-96 flex flex-col z-50 overflow-hidden";
+
   return (
-    <div className="fixed bottom-4 right-4 bg-white dark:bg-slate-900 rounded-xl shadow-2xl dark:shadow-slate-950/50 border border-slate-200 dark:border-slate-700 w-96 max-h-96 flex flex-col z-50">
+    <div className={panelClassName}>
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-t-xl flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5" />
-          <h3 className="font-bold">Learning AI Tutor</h3>
+          <h3 className="font-bold text-sm sm:text-base">Learning AI Tutor</h3>
         </div>
         <button
           onClick={() => {
@@ -199,16 +217,16 @@ Keep responses concise and educational. Focus on practical cybersecurity knowled
               <div key={idx} className="space-y-2">
                 {/* User Message */}
                 <div className="flex justify-end">
-                  <div className="bg-blue-600 text-white px-3 py-2 rounded-lg max-w-xs text-sm">
+                  <div className="bg-blue-600 text-white px-3 py-2 rounded-lg max-w-[85%] sm:max-w-xs text-sm break-words">
                     {conv.question}
                   </div>
                 </div>
 
                 {/* AI Response */}
                 <div className="flex justify-start">
-                  <div className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 px-3 py-2 rounded-lg max-w-xs text-sm">
+                  <div className="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-slate-200 px-3 py-2 rounded-lg max-w-[85%] sm:max-w-xs text-sm break-words">
                     <div
-                      className="prose prose-sm dark:prose-invert max-w-none"
+                      className="prose prose-sm dark:prose-invert max-w-none break-words [&_pre]:whitespace-pre-wrap"
                       dangerouslySetInnerHTML={{ __html: conv.answer }}
                     />
                   </div>
@@ -241,20 +259,20 @@ Keep responses concise and educational. Focus on practical cybersecurity knowled
 
       {/* Input Area */}
       <div className="border-t border-slate-200 dark:border-slate-700 px-4 py-3">
-        <form onSubmit={sendQuestion} className="flex gap-2">
+        <form onSubmit={sendQuestion} className="flex items-center gap-2">
           <input
             ref={inputRef}
             type="text"
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             placeholder="Ask a question..."
-            className="flex-1 px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
+            className="flex-1 min-w-0 px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-500 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors"
             disabled={loading}
           />
           <button
             type="submit"
             disabled={loading || !userInput.trim()}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-sm font-medium transition disabled:opacity-50 shrink-0"
           >
             {loading ? "..." : "Send"}
           </button>
